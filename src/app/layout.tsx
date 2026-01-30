@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Anti-Gravity | GitHub Portfolio Archiving Platform",
+  title: "Tucode Pamoja Portfolio",
   description: "The most aesthetic way to archive and showcase your GitHub projects.",
 };
 

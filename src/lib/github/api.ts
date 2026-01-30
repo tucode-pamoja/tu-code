@@ -18,21 +18,53 @@ export function parseGitHubUrl(url: string) {
  * GitHub API를 통해 리포지토리의 README 콘텐츠를 가져옵니다.
  */
 export async function fetchGitHubReadme(owner: string, repo: string) {
+    const headers = {
+        ...(process.env.GITHUB_ACCESS_TOKEN && {
+            Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+        }),
+    };
+
     try {
-        const response = await fetch(
+        // 1. 먼저 Raw 텍스트로 시도 (가장 효율적)
+        const rawResponse = await fetch(
             `https://api.github.com/repos/${owner}/${repo}/readme`,
             {
                 headers: {
+                    ...headers,
                     Accept: "application/vnd.github.v3.raw",
-                    ...(process.env.GITHUB_ACCESS_TOKEN && {
-                        Authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
-                    }),
                 },
             }
         );
 
-        if (!response.ok) return null;
-        return await response.text();
+        if (rawResponse.ok) {
+            return await rawResponse.text();
+        }
+
+        // 2. Raw 실패 시 JSON으로 시도하여 Base64 디코딩 (백업 로직)
+        const jsonResponse = await fetch(
+            `https://api.github.com/repos/${owner}/${repo}/readme`,
+            {
+                headers: {
+                    ...headers,
+                    Accept: "application/vnd.github.v3+json",
+                },
+            }
+        );
+
+        if (jsonResponse.ok) {
+            const data = await jsonResponse.json();
+            if (data.content) {
+                // Buffer는 Node.js 환경(Server Action)에서 사용 가능합니다.
+                return Buffer.from(data.content, "base64").toString("utf-8");
+            }
+        }
+
+        console.error(`GitHub API Error: ${jsonResponse.status} ${jsonResponse.statusText} for ${owner}/${repo}`);
+        if (jsonResponse.status === 403) {
+            console.warn("Hint: GitHub API Rate limit exceeded or invalid token. Please check GITHUB_ACCESS_TOKEN in .env.local");
+        }
+
+        return null;
     } catch (error) {
         console.error("Error fetching README:", error);
         return null;
@@ -48,12 +80,15 @@ export async function fetchGitHubRepoInfo(owner: string, repo: string) {
             headers: {
                 Accept: "application/vnd.github.v3+json",
                 ...(process.env.GITHUB_ACCESS_TOKEN && {
-                    Authorization: `token ${process.env.GITHUB_ACCESS_TOKEN}`,
+                    Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
                 }),
             },
         });
 
-        if (!response.ok) return null;
+        if (!response.ok) {
+            console.error(`GitHub API Info Error: ${response.status} ${response.statusText} for ${owner}/${repo}`);
+            return null;
+        }
         return await response.json();
     } catch (error) {
         console.error("Error fetching repo info:", error);

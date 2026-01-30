@@ -46,7 +46,7 @@ export default function NewProjectPage() {
                         name="title"
                         required
                         className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all"
-                        placeholder="예: Anti-Gravity"
+                        placeholder="예: Tucode Pamoja"
                     />
                 </div>
 

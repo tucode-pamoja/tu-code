@@ -17,6 +17,7 @@ export async function createProject(formData: FormData) {
     const tags = tagsString ? tagsString.split(",").map(t => t.trim()) : [];
 
     let readme_content = "";
+    let thumbnail_url = "";
 
     // GitHub 정보 자동 가져오기
     if (github_url) {
@@ -30,6 +31,7 @@ export async function createProject(formData: FormData) {
             if (repoData) {
                 if (!title) title = repoData.name;
                 if (!description) description = repoData.description;
+                thumbnail_url = repoData.owner?.avatar_url || "";
             }
             if (readmeData) {
                 readme_content = readmeData;
@@ -45,6 +47,7 @@ export async function createProject(formData: FormData) {
                 description,
                 github_url,
                 readme_content,
+                thumbnail_url,
                 tags,
                 created_by: session.user?.email || session.user?.name,
             },

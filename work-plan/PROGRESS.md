@@ -18,19 +18,20 @@
 - [x] 인증 UI 적용 (로그인/로그아웃 버튼 및 대시보드 리다이렉션)
 - [x] 보호된 관리자 라우트 설정 (`src/app/admin/layout.tsx`)
 
-### Phase 5: 핵심 기능 개발 ⚡ (30%)
+### Phase 4: GitHub API 연동 🐙 (100%)
+- [x] GitHub REST API 클라이언트 설정
+- [x] Repository URL 파싱 로직
+- [x] README.md 콘텐츠 fetch 기능
+- [x] Markdown -> HTML 변환 및 스타일링
+
+### Phase 5: 핵심 기능 개발 ⚡ (80%)
 - [x] 메인 페이지 히어로 섹션
 - [x] 관리자 대시보드 구조 및 사이드바
 - [x] 프로젝트 목록 조회 및 삭제
-- [x] 새 프로젝트 추가 기능 (수동 입력)
-- [ ] 메인 페이지 프로젝트 그리드
-- [ ] 프로젝트 상세 페이지
-
-### Phase 4: GitHub API 연동 🐙 (0%)
-- [ ] GitHub REST API 클라이언트 설정
-- [ ] Repository URL 파싱 로직
-- [ ] README.md 콘텐츠 fetch 기능
-- [ ] Markdown -> HTML 변환 및 스타일링
+- [x] 새 프로젝트 추가 기능 (GitHub 연동 포함)
+- [x] 메인 페이지 프로젝트 그리드
+- [x] 프로젝트 상세 페이지 (Markdown 렌더링 포함)
+- [ ] 사용자 커스텀 테마 설정
 
 ---
 
