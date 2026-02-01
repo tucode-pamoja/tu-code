@@ -4,10 +4,45 @@ import { Github, Calendar, User, ArrowLeft, ExternalLink, Globe } from "lucide-r
 import Link from "next/link";
 import MarkdownRenderer from "@/components/projects/markdown-renderer";
 import Navbar from "@/components/layout/navbar";
+import type { Metadata } from "next";
 
 interface ProjectPageProps {
-    params: {
+    params: Promise<{
         id: string;
+    }>;
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+    const { id } = await params;
+
+    const { data: project } = await supabase
+        .from("projects")
+        .select("title, description, thumbnail_url")
+        .eq("id", id)
+        .single();
+
+    if (!project) {
+        return {
+            title: "Project Not Found",
+            description: "The requested project could not be found."
+        };
+    }
+
+    return {
+        title: `${project.title} | Tucode Pamoja`,
+        description: project.description || `View details for project ${project.title}`,
+        openGraph: {
+            title: project.title,
+            description: project.description || `View details for project ${project.title}`,
+            images: project.thumbnail_url ? [{ url: project.thumbnail_url }] : [],
+            type: "article",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: project.title,
+            description: project.description || "",
+            images: project.thumbnail_url ? [project.thumbnail_url] : [],
+        }
     };
 }
 

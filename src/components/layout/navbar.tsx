@@ -1,13 +1,12 @@
 "use client";
 
-import { Github, LayoutDashboard, LogOut } from "lucide-react";
+import { Github, LogOut } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-// ... imports
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
@@ -16,16 +15,14 @@ export default function Navbar() {
     const searchParams = useSearchParams();
 
     // 1. Visibility Logic
-    const [isVisible, setIsVisible] = useState(true); // Default true to avoid flash, controlled by effect
+    const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        // If not on home page, always visible.
         if (pathname !== "/") {
             setIsVisible(true);
             return;
         }
 
-        // On Home page, default hidden initially 
         setIsVisible(false);
 
         let isHovered = false;
@@ -61,7 +58,6 @@ export default function Navbar() {
 
     const isMemberModalOpen = !!searchParams?.get("memberId");
 
-    // Hide Navbar on Admin pages OR when member modal is open
     if (pathname?.startsWith("/admin") || isMemberModalOpen) return null;
 
     const navItems = [
@@ -77,7 +73,7 @@ export default function Navbar() {
                 isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
             )}
         >
-            {/* Trendy Gradient Mask - Fades out content rolling under the navbar */}
+            {/* Trendy Gradient Mask */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-[#050508]/80 to-transparent" />
 
             <div className="container mx-auto px-6 h-24 flex justify-between items-center relative z-10 pointer-events-auto">
@@ -88,10 +84,12 @@ export default function Navbar() {
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
-                        <img
+                        <Image
                             src="/tucode-pamoja-logo.png"
                             alt="Logo"
-                            className="h-full w-full object-contain mix-blend-screen"
+                            fill
+                            className="object-contain mix-blend-screen"
+                            priority
                         />
                     </motion.div>
                     <span className="font-display font-black text-xl tracking-tighter brand-gradient-text uppercase leading-none whitespace-pre-line hidden md:block">
@@ -99,7 +97,7 @@ export default function Navbar() {
                     </span>
                 </Link>
 
-                {/* Center Navigation - Glassmorphism Pill */}
+                {/* Center Navigation */}
                 <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1 bg-white/5 backdrop-blur-2xl p-1.5 rounded-full border border-white/10 shadow-xl">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
