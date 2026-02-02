@@ -1,6 +1,5 @@
 "use client";
 
-export const runtime = "edge";
 
 import { updateProject, refreshProjectReadme } from "@/lib/actions";
 import { supabase } from "@/lib/supabase/client";

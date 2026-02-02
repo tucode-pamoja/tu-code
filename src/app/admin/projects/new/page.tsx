@@ -1,6 +1,5 @@
 "use client";
 
-export const runtime = "edge";
 
 import { createProject } from "@/lib/actions";
 import { Github, ArrowLeft, Loader2 } from "lucide-react";
