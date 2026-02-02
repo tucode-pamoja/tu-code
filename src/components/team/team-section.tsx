@@ -155,21 +155,26 @@ export default function TeamSection() {
                                         )}
 
                                         {/* Related Projects */}
-                                        {projects.some(p => p.created_by === selectedMember.name || p.title === selectedMember.representative_project) && (
-                                            <div className="pt-10 border-t border-white/10 mt-10">
-                                                <h3 className="text-2xl font-bold text-white mb-6">
-                                                    Created Projects
-                                                </h3>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                                    {projects.filter(p =>
-                                                        p.created_by === selectedMember.name ||
-                                                        p.title === selectedMember.representative_project
-                                                    ).map(project => (
-                                                        <ProjectCard key={project.id} project={project} />
-                                                    ))}
+                                        {projects.some(p =>
+                                            selectedMember.related_project_ids?.includes(p.id) ||
+                                            p.title === selectedMember.representative_project ||
+                                            p.created_by === selectedMember.name
+                                        ) && (
+                                                <div className="pt-10 border-t border-white/10 mt-10">
+                                                    <h3 className="text-2xl font-bold text-white mb-6">
+                                                        Created Projects
+                                                    </h3>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                        {projects.filter(p =>
+                                                            selectedMember.related_project_ids?.includes(p.id) ||
+                                                            p.created_by === selectedMember.name ||
+                                                            p.title === selectedMember.representative_project
+                                                        ).map(project => (
+                                                            <ProjectCard key={project.id} project={project} />
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
                                     </div>
                                 </div>
                             </motion.div>

@@ -1,10 +1,10 @@
 "use client";
 
 
-import { createTeamMember } from "@/lib/actions";
+import { createTeamMember, getProjects } from "@/lib/actions";
 import { Github, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ImagePicker from "@/components/ui/image-picker";
 import RichTextEditor from "@/components/editor/rich-text-editor";
@@ -12,7 +12,12 @@ import RichTextEditor from "@/components/editor/rich-text-editor";
 export default function NewTeamMemberPage() {
     const [loading, setLoading] = useState(false);
     const [customContent, setCustomContent] = useState("");
+    const [projects, setProjects] = useState<any[]>([]);
     const router = useRouter();
+
+    useEffect(() => {
+        getProjects().then(setProjects);
+    }, []);
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
@@ -117,6 +122,27 @@ export default function NewTeamMemberPage() {
                         className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all"
                         placeholder="예: TOSS Clone"
                     />
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-text-secondary">참여 프로젝트 (다중 선택 - 상세 페이지 노출)</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 bg-surface-1 rounded-xl border border-surface-3 max-h-60 overflow-y-auto">
+                        {projects.length === 0 && <p className="text-sm text-text-muted col-span-2">등록된 프로젝트가 없습니다.</p>}
+                        {projects.map((project) => (
+                            <div key={project.id} className="flex items-center gap-3">
+                                <input
+                                    type="checkbox"
+                                    name="related_project_ids"
+                                    value={project.id}
+                                    id={`project-${project.id}`}
+                                    className="h-5 w-5 rounded border-surface-3 text-primary-500 focus:ring-primary-500"
+                                />
+                                <label htmlFor={`project-${project.id}`} className="text-sm cursor-pointer select-none truncate">
+                                    {project.title}
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

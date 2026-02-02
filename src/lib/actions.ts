@@ -25,6 +25,7 @@ export async function createTeamMember(formData: FormData) {
     const short_message = formData.get("short_message") as string;
     const background_color = formData.get("background_color") as string;
     const representative_project = formData.get("representative_project") as string;
+    const related_project_ids = formData.getAll("related_project_ids") as string[]; // Multiple projects
     const use_github_data = formData.get("use_github_data") === "true";
     const backgroundImageFile = formData.get("background_image") as File;
 
@@ -93,6 +94,7 @@ export async function createTeamMember(formData: FormData) {
                 background_color,
                 background_image_url,
                 representative_project,
+                related_project_ids,
                 use_github_data
             },
         ]);
@@ -155,6 +157,7 @@ export async function updateTeamMember(id: string, formData: FormData) {
     const short_message = formData.get("short_message") as string;
     const background_color = formData.get("background_color") as string;
     const representative_project = formData.get("representative_project") as string;
+    const related_project_ids = formData.getAll("related_project_ids") as string[];
     const use_github_data = formData.get("use_github_data") === "true";
     const backgroundImageFile = formData.get("background_image") as File;
     const use_glassmorphism = formData.get("use_glassmorphism") === "true";
@@ -216,6 +219,7 @@ export async function updateTeamMember(id: string, formData: FormData) {
         short_message,
         background_color,
         representative_project,
+        related_project_ids,
         use_github_data,
         use_glassmorphism,
         updated_at: new Date().toISOString(),
@@ -293,6 +297,7 @@ export async function createProject(formData: FormData) {
     const tags = tagsString ? tagsString.split(",").map(t => t.trim()) : [];
     const thumbnailFile = formData.get("thumbnail") as File;
     const custom_content = formData.get("custom_content") as string;
+    const deployment_status = formData.get("deployment_status") as string || "live";
 
     let readme_content = "";
     let thumbnail_url = "";
@@ -343,6 +348,7 @@ export async function createProject(formData: FormData) {
                 thumbnail_url,
                 custom_content,
                 tags,
+                deployment_status,
                 created_by: session.user?.email || session.user?.name,
             },
         ])
@@ -391,6 +397,7 @@ export async function updateProject(id: string, formData: FormData) {
     const is_featured = formData.get("is_featured") === "true";
     const thumbnailFile = formData.get("thumbnail") as File;
     const custom_content = formData.get("custom_content") as string;
+    const deployment_status = formData.get("deployment_status") as string;
 
     // GitHub URL이 변경되었으면 README 다시 가져오기
     let readme_content: string | undefined;
@@ -413,6 +420,7 @@ export async function updateProject(id: string, formData: FormData) {
         tags,
         is_featured,
         custom_content,
+        deployment_status,
         updated_at: new Date().toISOString(),
     };
 
@@ -525,7 +533,7 @@ export async function getTeamMembers() {
 export async function getProjects() {
     const { data, error } = await supabaseAdmin
         .from("projects")
-        .select("id, title, thumbnail_url, description")
+        .select("id, title, thumbnail_url, description, deployment_status")
         .order("created_at", { ascending: false });
 
     if (error) {

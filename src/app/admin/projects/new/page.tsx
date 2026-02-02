@@ -107,6 +107,19 @@ export default function NewProjectPage() {
                 </div>
 
                 <div className="space-y-2">
+                    <label className="text-sm font-medium text-text-secondary">배포 상태</label>
+                    <select
+                        name="deployment_status"
+                        className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all appearance-none"
+                        defaultValue="live"
+                    >
+                        <option value="live">🟢 Live (배포 완료)</option>
+                        <option value="building">🟡 Building (배포 중)</option>
+                        <option value="offline">🔴 Offline (중단됨)</option>
+                    </select>
+                </div>
+
+                <div className="space-y-2">
                     <label className="text-sm font-medium text-text-secondary">GitHub URL</label>
                     <div className="relative">
                         <Github className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />

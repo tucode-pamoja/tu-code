@@ -6,12 +6,32 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+    const status = (project.deployment_status || "live") as "live" | "building" | "offline";
+    const statusColors = {
+        live: "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]",
+        building: "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)] animate-pulse",
+        offline: "bg-red-500/50",
+    };
+    const statusLabel = {
+        live: "LIVE",
+        building: "BUILDING",
+        offline: "OFFLINE",
+    };
+
     return (
         <Link href={`/projects/${project.id}`} className="group relative h-full flex flex-col p-6 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] hover:border-white/10 transition-all duration-700 backdrop-blur-sm overflow-hidden">
             {/* Subtle Gradient Glow Background */}
             <div className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-br from-orange-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
             <div className="relative aspect-square w-full overflow-hidden rounded-[2rem] bg-black/20 border border-white/5 mb-8 shadow-2xl transition-all duration-700 ring-1 ring-white/5 group-hover:ring-orange-500/20">
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full">
+                    <div className={`h-1.5 w-1.5 rounded-full ${statusColors[status] || statusColors.live}`} />
+                    <span className="text-[10px] font-bold tracking-widest text-white/90">
+                        {statusLabel[status] || "LIVE"}
+                    </span>
+                </div>
+
                 {project.thumbnail_url ? (
                     <img
                         src={project.thumbnail_url}

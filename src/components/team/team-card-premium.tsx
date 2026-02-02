@@ -21,6 +21,7 @@ export interface TeamMember {
     use_github_data?: boolean;
     use_glassmorphism?: boolean;
     representative_project?: string;
+    related_project_ids?: string[];
     custom_content?: string;
     readme_content?: string;
 }
