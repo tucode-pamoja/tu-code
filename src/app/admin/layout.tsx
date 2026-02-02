@@ -1,4 +1,6 @@
 import { auth } from "@/lib/auth";
+
+export const runtime = "edge";
 import {
     LayoutDashboard,
     FolderGit2,

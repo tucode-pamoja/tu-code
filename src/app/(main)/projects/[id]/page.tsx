@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
+
+export const runtime = "edge";
 import { notFound } from "next/navigation";
 import { Github, Calendar, User, ArrowLeft, ExternalLink, Globe } from "lucide-react";
 import Link from "next/link";
