@@ -1,5 +1,7 @@
 "use client";
 
+export const runtime = "edge";
+
 import { createTeamMember } from "@/lib/actions";
 import { Github, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";

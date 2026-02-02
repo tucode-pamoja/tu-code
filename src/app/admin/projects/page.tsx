@@ -1,4 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase/server";
+
+export const runtime = "edge";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import SortableProjectList from "@/components/admin/sortable-project-list";

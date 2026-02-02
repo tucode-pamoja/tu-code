@@ -1,4 +1,6 @@
 import { auth } from "@/lib/auth";
+
+export const runtime = "edge";
 import { FolderGit2, Plus, Users, Star, ArrowUpRight, Zap, Target, Activity } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
